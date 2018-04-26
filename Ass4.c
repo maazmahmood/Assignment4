@@ -1,24 +1,26 @@
 #include <stdio.h>
 #include <pthread.h>
  
-#define MAX_THREAD 10
+#define Big_thread 10
 #define MAX 1000
  
 int a[MAX]; 
 int sum[10] = { 0 };
 int part = 0;
- int i;
- 
- 
-void* sum_array(void* arg)
+ int i; 
+
+ void* sum_array(void* arg)
 {
  
-    int thread_part = part++;
+    int T_piece = part++;
  
-    for ( i = thread_part * (MAX / 10); i < (thread_part + 1) * (MAX / 10); i++)
-        sum[thread_part] += a[i];
+    for ( i = T_piece * (MAX / 10); i < (T_piece + 1) * (MAX / 10); i++)
+        sum[T_piece] += a[i];
 }
  
+ 
+
+
 int main()
 {
  	int i;
@@ -29,24 +31,24 @@ int main()
 		a[i]=i;
 	}
  	
-    pthread_t threads[MAX_THREAD];
+    pthread_t threads[Big_thread];
  
     // Here we create 10 threads
-    for ( i = 0; i < MAX_THREAD; i++)
+    for ( i = 0; i < Big_thread; i++)
         pthread_create(&threads[i], NULL, sum_array, (void*)NULL);
  
     // we join 10 threads as we wait for all 10 threads to complete
     
-	for ( j = 0; j < MAX_THREAD; j++)
+	for ( j = 0; j < Big_thread; j++)
         pthread_join(threads[j], NULL);
  
     // adding sum of all 10 threads
    
     int total_sum = 0;
-    for ( k = 0; k < MAX_THREAD; k++)
+    for ( k = 0; k < Big_thread; k++)
         total_sum += sum[k];
  
-    printf("sum is %d\n",total_sum );
+    printf("The Total Sum is %d\n",total_sum );
  
     return 0;
 }
